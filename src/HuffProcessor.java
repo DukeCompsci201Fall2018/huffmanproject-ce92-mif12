@@ -96,15 +96,12 @@ public class HuffProcessor {
 				if (bits == 0) current = current.myLeft;
 				else current = current.myRight;
 				
-				if (current != null & current.myLeft == null && current.myRight == null) {
+				if (current != null && current.myLeft == null && current.myRight == null) {
 					if (current.myValue == PSEUDO_EOF) {
 						break;   // out of loop
 					}
 					else {
-						int val = in.readBits(BITS_PER_WORD);
-						if (val == -1) break;
-						out.writeBits(BITS_PER_WORD, val);
-	       				
+						out.writeBits(BITS_PER_WORD, current.myValue);
 	       				current = root; // start back after leaf
 	               }
 	           }
