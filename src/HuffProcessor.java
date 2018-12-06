@@ -96,7 +96,7 @@ public class HuffProcessor {
 				if (bits == 0) current = current.myLeft;
 				else current = current.myRight;
 				
-				if (current != null && current.myValue != 0) {
+				if (current != null & current.myLeft == null && current.myRight == null) {
 					if (current.myValue == PSEUDO_EOF) {
 						break;   // out of loop
 					}
