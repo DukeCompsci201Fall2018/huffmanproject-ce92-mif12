@@ -55,39 +55,16 @@ public class HuffProcessor {
 		out.close();
 	}
 	
-	private void writeHeader(HuffNode root, BitOutputStream out)	{
-		HuffNode current = root;
-		
-		if(current.myLeft == null && current.myRight == null)	{
-			out.writeBits(BITS_PER_WORD + 1, Integer.parseInt("" + 1 + "" + current.myValue));
-		}
-		else	{
-			out.writeBits(1, 0);
-			writeHeader(current.myLeft, out);
-			writeHeader(current.myRight, out);
-		}
-	}
-	
-	private void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out)	{
-		while (true) {
-			int val = in.readBits(BITS_PER_WORD);
-			if (val == -1) break;
-			String code = codings[val];
-			out.writeBits(code.length(), Integer.parseInt(code,2));
-		}
-		String code = codings[PSEUDO_EOF];
-		out.writeBits(code.length(), Integer.parseInt(code,2));
-
-	}
-	
 	private int[] readForCounts(BitInputStream in)	{
 		int[] freq = new int[ALPH_SIZE + 1];
 		freq[PSEUDO_EOF] = 1;
+		
 		while (true){
 			int val = in.readBits(BITS_PER_WORD);
 			if (val == -1) break;
-			freq[val]++;
+			freq[val] = freq[val] + 1;
 		}
+		
 		return freq;
 	}
 	
@@ -124,6 +101,31 @@ public class HuffProcessor {
 		codingHelper(root.myLeft, s + "0", encodings);
 		codingHelper(root.myRight, s + "1", encodings);
 	}
+	
+	private void writeHeader(HuffNode root, BitOutputStream out)	{
+		HuffNode current = root;
+		
+		if(current.myLeft == null && current.myRight == null)	{
+			out.writeBits(BITS_PER_WORD + 1, Integer.parseInt("" + 1 + "" + current.myValue));
+		}
+		else	{
+			out.writeBits(1, 0);
+			writeHeader(current.myLeft, out);
+			writeHeader(current.myRight, out);
+		}
+	}
+	
+	private void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out)	{
+		while (true) {
+			int val = in.readBits(BITS_PER_WORD);
+			if (val == -1) break;
+			String code = codings[val];
+			out.writeBits(code.length(), Integer.parseInt(code,2));
+		}
+		String code = codings[PSEUDO_EOF];
+		out.writeBits(code.length(), Integer.parseInt(code,2));
+	}
+	
 	
 	/**
 	 * Decompresses a file. Output file must be identical bit-by-bit to the
