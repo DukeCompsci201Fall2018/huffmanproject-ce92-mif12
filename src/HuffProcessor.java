@@ -80,7 +80,7 @@ public class HuffProcessor {
 		while(pq.size() > 1)	{
 			HuffNode left = pq.remove();
 			HuffNode right = pq.remove();
-			HuffNode t = new HuffNode(-1,left.myWeight + right.myWeight, left, right);
+			HuffNode t = new HuffNode(1,left.myWeight + right.myWeight, left, right);
 			pq.add(t);
 		}
 		HuffNode root = pq.remove();
@@ -109,8 +109,7 @@ public class HuffProcessor {
 			out.writeBits(BITS_PER_WORD + 1, Integer.parseInt("" + 1 + "" + current.myValue));
 		}
 		else	{
-			//POTENTIAL FIX
-			out.writeBits(BITS_PER_WORD + 1, 0);
+			out.writeBits(1, 0);
 			writeHeader(current.myLeft, out);
 			writeHeader(current.myRight, out);
 		}
