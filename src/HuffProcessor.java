@@ -106,7 +106,8 @@ public class HuffProcessor {
 		HuffNode current = root;
 		
 		if(current.myLeft == null && current.myRight == null)	{
-			out.writeBits(BITS_PER_WORD + 1, Integer.parseInt("" + 1 + "" + current.myValue));
+			out.writeBits(1, 1);
+			out.writeBits(BITS_PER_WORD + 1, current.myValue);
 		}
 		else	{
 			out.writeBits(1, 0);
