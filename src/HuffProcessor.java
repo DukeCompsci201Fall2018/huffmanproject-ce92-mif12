@@ -109,7 +109,8 @@ public class HuffProcessor {
 			out.writeBits(BITS_PER_WORD + 1, Integer.parseInt("" + 1 + "" + current.myValue));
 		}
 		else	{
-			out.writeBits(1, 0);
+			//POTENTIAL FIX
+			out.writeBits(BITS_PER_WORD + 1, 0);
 			writeHeader(current.myLeft, out);
 			writeHeader(current.myRight, out);
 		}
